@@ -17,23 +17,29 @@ class DetailsPresenterImpl @Inject constructor(private val mApiService: GitHubSe
 
 
     private var mData: List<SubscribersResponseModel>? = null
+    private var mUserName: String? = null
+    private var mRepoName: String? = null
 
     override fun bind(view: DetailsContract.DetailsView) {
         super.bind(view)
 
         //if data already exists we show it without fetching
-        mData?.let {
-            showData(it)
+        if (mData != null && mRepoName != null) {
+            showData(mData!!, mRepoName!!)
             return
         }
 
-        //TODO : pass those parameters via injection
-        fetchData("JakeWharton", "apibuilder")
+        if (mUserName != null && mRepoName != null) {
+            fetchData(mUserName!!, mRepoName!!)
+        } else {
+            mBoundView?.showError("Requested Subscribers cannot be found")
+        }
     }
 
-    private fun showData(data: List<SubscribersResponseModel>) {
-        mBoundView?.changeTitle("apibuilder")
+    private fun showData(data: List<SubscribersResponseModel>, repoName: String) {
+        mBoundView?.changeTitle(repoName)
         mBoundView?.showSubscribers(data)
+        mBoundView?.showSubscribersCount(data.size)
     }
 
     private fun fetchData(userName: String, repoName: String) {
@@ -47,7 +53,7 @@ class DetailsPresenterImpl @Inject constructor(private val mApiService: GitHubSe
                                 { result ->
                                     mBoundView?.let {
                                         mData = result
-                                        showData(result)
+                                        showData(result, repoName)
                                     }
                                 },
                                 { error ->
@@ -66,11 +72,18 @@ class DetailsPresenterImpl @Inject constructor(private val mApiService: GitHubSe
     override fun saveState() {
         //we persist a copy of the data in repository to restore later
         mPersistenceRepository.persist(ArrayList(mData), javaClass.simpleName)
+
+        if (mUserName != null && mRepoName != null) {
+            mPersistenceRepository.persist(mUserName!!, PresenterStateRepository.USERNAME_KEY)
+            mPersistenceRepository.persist(mRepoName!!, PresenterStateRepository.REPONAME_KEY)
+        }
     }
 
     override fun restoreState() {
         //we retrieve the stored data
         mData = mPersistenceRepository.retrieve<ArrayList<SubscribersResponseModel>>(javaClass.simpleName)
+        mUserName = mPersistenceRepository.retrieve(PresenterStateRepository.USERNAME_KEY)
+        mRepoName = mPersistenceRepository.retrieve(PresenterStateRepository.REPONAME_KEY)
     }
 
     private fun wrapErrorMessage(error: Throwable) = error.message ?:

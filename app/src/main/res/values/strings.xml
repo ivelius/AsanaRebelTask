@@ -5,6 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="no_data_available">Click the button to load list of repositories</string>
+    <string name="click_to_load">Click the button to load list of repositories</string>
     <string name="no_repos">No repos for this user</string>
+    <string name="no_subscribers">No subscribers found for current repo</string>
 </resources>

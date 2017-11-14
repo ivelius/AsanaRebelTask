@@ -8,7 +8,7 @@ import com.asanarebel.yanbraslavski.asanarebeltask.App
 import com.asanarebel.yanbraslavski.asanarebeltask.R
 import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.SubscribersResponseModel
 import com.asanarebel.yanbraslavski.asanarebeltask.base.BaseActivity
-import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.activity_details.*
 import javax.inject.Inject
 
 class DetailsActivity : BaseActivity(), DetailsContract.DetailsView {
@@ -25,7 +25,7 @@ class DetailsActivity : BaseActivity(), DetailsContract.DetailsView {
     }
 
     private fun initView() {
-        initActionBar()
+        supportActionBar?.title = ""
         initRecyclerView()
         empty_view.visibility = View.VISIBLE
     }
@@ -43,6 +43,10 @@ class DetailsActivity : BaseActivity(), DetailsContract.DetailsView {
     override fun onSaveInstanceState(outState: Bundle?) {
         mPresenter.saveState()
         super.onSaveInstanceState(outState)
+    }
+
+    override fun showSubscribersCount(subscribersCount: Int) {
+        subscribers_count.text = "$subscribersCount"
     }
 
     override fun showSubscribers(subscribersList: List<SubscribersResponseModel>) {

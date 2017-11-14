@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.TextView
 import com.affinitas.task.mvp.BaseContract
+import kotlinx.android.synthetic.main.activity_details.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -17,16 +18,10 @@ abstract class BaseActivity : AppCompatActivity(), BaseContract.BaseView {
          val BUNDLE_KEY_PRESENTER = "presenter"
     }
 
-    protected fun initActionBar() {
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = ""
-    }
 
     override fun showMessage(message: String) {
-        Snackbar.make(fab_btn, message, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        Snackbar.make(recycler_view, message, Snackbar.LENGTH_LONG).show()
     }
-
     override fun showLoading() {
         loading_overlay?.let {
             it.visibility = View.VISIBLE
@@ -48,7 +43,7 @@ abstract class BaseActivity : AppCompatActivity(), BaseContract.BaseView {
     }
 
     override fun showError(errorMessage: String) {
-        val snack = Snackbar.make(toolbar, errorMessage, Snackbar.LENGTH_LONG)
+        val snack = Snackbar.make(recycler_view, errorMessage, Snackbar.LENGTH_LONG)
         val tv = snack.view.findViewById<TextView>(android.support.design.R.id.snackbar_text) as TextView
         tv.setTextColor(Color.RED)
         snack.show()

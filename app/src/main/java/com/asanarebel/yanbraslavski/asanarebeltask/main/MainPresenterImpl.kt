@@ -40,7 +40,14 @@ class MainPresenterImpl @Inject constructor(private val mApiService: GitHubServi
     }
 
     override fun onItemClicked(it: GithubRepoResponseModel) {
-        mBoundView?.showDetailsView(it)
+        //We pass data to a new presenter through persistence layer (which is a part of our data model)
+        //This approach is advocated by many notorious Android Engineers , which I also like a lot.
+        val repoName = it.name
+        mData?.first()?.let {
+            mPersistenceRepository.persist(it.owner.login, PresenterStateRepository.USERNAME_KEY)
+            mPersistenceRepository.persist(repoName, PresenterStateRepository.REPONAME_KEY)
+            mBoundView?.showDetailsView()
+        }
     }
 
     override fun saveState() {

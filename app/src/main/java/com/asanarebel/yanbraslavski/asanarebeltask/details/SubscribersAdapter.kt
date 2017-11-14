@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.asanarebel.yanbraslavski.asanarebeltask.R
-import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.GithubRepoResponseModel
 import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.SubscribersResponseModel
 import com.squareup.picasso.Picasso
 
@@ -20,7 +19,7 @@ class SubscribersAdapter(private val mDataItems: List<SubscribersResponseModel>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.repo_item, parent, false)
+                .inflate(R.layout.subscriber_item, parent, false)
         return ViewHolder(view)
     }
 

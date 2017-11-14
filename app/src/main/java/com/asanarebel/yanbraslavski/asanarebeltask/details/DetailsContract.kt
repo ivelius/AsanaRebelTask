@@ -13,6 +13,7 @@ object DetailsContract {
      */
     interface DetailsView : BaseContract.BaseView {
         fun showSubscribers(subscribersList: List<SubscribersResponseModel>)
+        fun showSubscribersCount(subscribersCount: Int)
     }
 
     /**

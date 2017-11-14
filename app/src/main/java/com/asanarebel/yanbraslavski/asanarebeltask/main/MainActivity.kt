@@ -1,18 +1,22 @@
 package com.asanarebel.yanbraslavski.asanarebeltask.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.asanarebel.yanbraslavski.asanarebeltask.App
 import com.asanarebel.yanbraslavski.asanarebeltask.R
 import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.GithubRepoResponseModel
 import com.asanarebel.yanbraslavski.asanarebeltask.base.BaseActivity
+import com.asanarebel.yanbraslavski.asanarebeltask.details.DetailsActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
+
 
 class MainActivity : BaseActivity(), MainContract.MainView {
 
@@ -32,6 +36,11 @@ class MainActivity : BaseActivity(), MainContract.MainView {
         initRecyclerView()
         fab_btn.setOnClickListener { mPresenter.onFabClicked() }
         empty_view.visibility = View.VISIBLE
+    }
+
+    private fun initActionBar() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = ""
     }
 
     private fun initRecyclerView() {
@@ -63,8 +72,8 @@ class MainActivity : BaseActivity(), MainContract.MainView {
         }
     }
 
-    override fun showDetailsView(it: GithubRepoResponseModel) {
-        showMessage("Clicked on ${it.name}")
+    override fun showDetailsView() {
+        startActivity(Intent(this, DetailsActivity::class.java))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -78,7 +87,10 @@ class MainActivity : BaseActivity(), MainContract.MainView {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
-            R.id.action_settings -> return true
+            R.id.action_settings -> {
+                Toast.makeText(this, "No settings for this app", Toast.LENGTH_SHORT).show()
+                return true
+            }
             else -> return super.onOptionsItemSelected(item)
         }
     }

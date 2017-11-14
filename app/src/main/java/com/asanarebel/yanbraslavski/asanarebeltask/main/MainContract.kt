@@ -14,7 +14,7 @@ object MainContract {
     interface MainView : BaseContract.BaseView {
 
         fun showRepositories(repos: List<GithubRepoResponseModel>)
-        fun showDetailsView(it: GithubRepoResponseModel)
+        fun showDetailsView()
     }
 
     /**
