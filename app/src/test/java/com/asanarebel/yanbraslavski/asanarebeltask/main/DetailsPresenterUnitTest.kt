@@ -2,23 +2,23 @@ package com.asanarebel.yanbraslavski.asanarebeltask.main
 
 import com.affinitas.task.api.GitHubService
 import com.affinitas.task.utils.RxUtils
+import com.asanarebel.yanbraslavski.asanarebeltask.details.DetailsContract
 import com.nhaarman.mockito_kotlin.mock
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
 /**
- * Test Suit for MainPresenter
+ * Test Suit for DetailsPresenter
  */
-class MainPresenterUnitTest {
-    private val mBoundView: MainContract.MainView = mock()
+class DetailsPresenterUnitTest {
+    private val mBoundView: DetailsContract.DetailsPresenter = mock()
     private val apiService: GitHubService = mock()
     private lateinit var mPresenterUnderTest: MainContract.MainPresenter
 
     @Before
     fun setUp() {
         RxUtils.makeRxSchedulersImmidiate()
-
 //        val personalityTestResponseModel = PersonalityTestResponseModel(emptyList(), emptyList())
 //        Mockito.`when`(apiService.fetchData()).thenReturn(Observable.just(personalityTestResponseModel))
 //        mPresenterUnderTest = MainContract.MainPresenter(apiService)
@@ -61,26 +61,6 @@ class MainPresenterUnitTest {
      */
     @Test
     fun testDataLoadOnBind() {
-
-    }
-
-    /**
-     * When repo item is clicked , presenter should store
-     * related data in the persistenceRepository and make the view to show
-     * details page
-     */
-    @Test
-    fun testRepoItemClicked() {
-
-    }
-
-    /**
-     * When search query is updated presenter should store
-     * an updated value and be ready to fetch a new data when user executes
-     * the Search
-     */
-    @Test
-    fun testSearch() {
 
     }
 
