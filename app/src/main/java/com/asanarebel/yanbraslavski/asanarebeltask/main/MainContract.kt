@@ -12,13 +12,9 @@ object MainContract {
      * Presenter -> View
      */
     interface MainView : BaseContract.BaseView {
-        fun showMessage(message: String)
-        fun showLoading()
+
         fun showRepositories(repos: List<GithubRepoResponseModel>)
-        fun stopLoading()
-        fun showError(errorMessage: String)
         fun showDetailsView(it: GithubRepoResponseModel)
-        fun changeTitle(title: String)
     }
 
     /**

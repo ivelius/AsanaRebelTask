@@ -1,6 +1,5 @@
 package com.affinitas.task.main.di.app
 
-import com.affinitas.task.api.GitHubService
 import com.affinitas.task.di.app.AppComponent
 import com.affinitas.task.di.app.TestAppModule
 import com.asanarebel.yanbraslavski.asanarebeltask.main.MainActivity
@@ -14,5 +13,4 @@ import javax.inject.Singleton
 @Component(modules = arrayOf(TestAppModule::class))
 interface TestAppComponent : AppComponent {
     override  fun inject(mainActivity: MainActivity)
-    override fun provide(): GitHubService
 }

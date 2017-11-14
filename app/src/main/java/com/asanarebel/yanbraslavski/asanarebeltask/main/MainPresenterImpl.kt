@@ -1,28 +1,22 @@
 package com.asanarebel.yanbraslavski.asanarebeltask.main
 
-import android.util.Log
 import com.affinitas.task.api.GitHubService
 import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.GithubRepoResponseModel
+import com.asanarebel.yanbraslavski.asanarebeltask.mvp.BasePresenterImpl
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
  * Created by yan.braslavski on 11/13/17.
  */
-class MainPresenter @Inject constructor(private val mApiService: GitHubService)
-    : MainContract.MainPresenter {
+class MainPresenterImpl @Inject constructor(private val mApiService: GitHubService)
+    : BasePresenterImpl<MainContract.MainView>(), MainContract.MainPresenter {
 
-
-    private val mDisposablesBag: CompositeDisposable = CompositeDisposable()
-    private var mBoundView: MainContract.MainView? = null
     private var mData: List<GithubRepoResponseModel>? = null
 
     override fun bind(view: MainContract.MainView) {
-        mBoundView = view
-
-        Log.d("tag", "Injected service is $mApiService")
+        super.bind(view)
 
         //if data already exists we show it without fetching
         mData?.let {
@@ -45,11 +39,6 @@ class MainPresenter @Inject constructor(private val mApiService: GitHubService)
 
     override fun onItemClicked(it: GithubRepoResponseModel) {
         mBoundView?.showDetailsView(it)
-    }
-
-    override fun unbind() {
-        mBoundView = null
-        mDisposablesBag.clear()
     }
 
     private fun fetchData(userName: String) {
