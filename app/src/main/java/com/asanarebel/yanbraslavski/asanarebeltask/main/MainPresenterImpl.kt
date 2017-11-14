@@ -17,6 +17,12 @@ class MainPresenterImpl @Inject constructor(private val mApiService: GitHubServi
 
     private var mData: List<GithubRepoResponseModel>? = null
 
+    /**
+     * By default we going to present repos of legendary Jake Worthon
+     * https://github.com/jakewharton
+     */
+    private var mSearchQuery: String = "jakewharton"
+
     override fun bind(view: MainContract.MainView) {
         super.bind(view)
 
@@ -34,9 +40,9 @@ class MainPresenterImpl @Inject constructor(private val mApiService: GitHubServi
         mBoundView?.showRepositories(data)
     }
 
-    override fun onFabClicked() {
-        //Data fetching
-        fetchData("JakeWharton")
+    override fun onSearchClicked() {
+        mBoundView?.hideKeyboard()
+        fetchData(mSearchQuery)
     }
 
     override fun onItemClicked(it: GithubRepoResponseModel) {
@@ -48,6 +54,10 @@ class MainPresenterImpl @Inject constructor(private val mApiService: GitHubServi
             mPersistenceRepository.persist(repoName, PresenterStateRepository.REPONAME_KEY)
             mBoundView?.showDetailsView()
         }
+    }
+
+    override fun onSearchQueryUpdate(searchQuery: String) {
+        mSearchQuery = searchQuery
     }
 
     override fun saveState() {

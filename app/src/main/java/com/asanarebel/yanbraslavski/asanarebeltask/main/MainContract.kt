@@ -15,6 +15,7 @@ object MainContract {
 
         fun showRepositories(repos: List<GithubRepoResponseModel>)
         fun showDetailsView()
+        fun hideKeyboard()
     }
 
     /**
@@ -22,7 +23,8 @@ object MainContract {
      * View -> Presenter
      */
     interface MainPresenter : BaseContract.BasePresenter<MainView> {
-        fun onFabClicked()
+        fun onSearchClicked()
         fun onItemClicked(it: GithubRepoResponseModel)
+        fun onSearchQueryUpdate(searchQuery: String)
     }
 }
