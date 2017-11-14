@@ -6,4 +6,5 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="side_margins">8dp</dimen>
+    <dimen name="repo_item_text_width">200dp</dimen>
 </resources>
