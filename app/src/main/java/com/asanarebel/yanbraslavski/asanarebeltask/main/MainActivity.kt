@@ -1,15 +1,20 @@
 package com.asanarebel.yanbraslavski.asanarebeltask.main
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import com.asanarebel.yanbraslavski.asanarebeltask.App
 import com.asanarebel.yanbraslavski.asanarebeltask.R
+import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.GithubRepoResponseModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import javax.inject.Inject
@@ -63,7 +68,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun showLoading() {
-        //TODO : Show loading screen
+        loading_overlay?.let {
+            it.visibility = View.VISIBLE
+            it.animate().alpha(1f)
+        }
+    }
+
+    override fun stopLoading() {
+        loading_overlay?.let {
+            it.visibility = View.VISIBLE
+            it.animate().alpha(0f).withEndAction({
+                it.visibility = View.GONE
+            })
+        }
+    }
+
+    override fun showData(data: List<GithubRepoResponseModel>) {
+        Log.d("tag", "data is $data")
+    }
+
+    override fun showError(errorMessage: String) {
+        val snack = Snackbar.make(toolbar, errorMessage, Snackbar.LENGTH_LONG)
+        val tv = snack.view.findViewById<TextView>(android.support.design.R.id.snackbar_text) as TextView
+        tv.setTextColor(Color.RED)
+        snack.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

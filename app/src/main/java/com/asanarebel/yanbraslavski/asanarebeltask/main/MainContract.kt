@@ -1,6 +1,7 @@
 package com.asanarebel.yanbraslavski.asanarebeltask.main
 
 import com.affinitas.task.mvp.BaseContract
+import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.GithubRepoResponseModel
 
 /**
  * Created by yan.braslavski on 11/13/17.
@@ -13,6 +14,9 @@ object MainContract {
     interface MainView : BaseContract.BaseView {
         fun showMessage(message: String)
         fun showLoading()
+        fun showData(data: List<GithubRepoResponseModel>)
+        fun stopLoading()
+        fun showError(wrapErrorMessage: String)
     }
 
     /**
