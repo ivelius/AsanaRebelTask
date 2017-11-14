@@ -3,6 +3,7 @@ package com.asanarebel.yanbraslavski.asanarebeltask.main
 import com.affinitas.task.api.GitHubService
 import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.GithubRepoResponseModel
 import com.asanarebel.yanbraslavski.asanarebeltask.mvp.BasePresenterImpl
+import com.asanarebel.yanbraslavski.asanarebeltask.persistence.PresenterStateRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -10,7 +11,8 @@ import javax.inject.Inject
 /**
  * Created by yan.braslavski on 11/13/17.
  */
-class MainPresenterImpl @Inject constructor(private val mApiService: GitHubService)
+class MainPresenterImpl @Inject constructor(private val mApiService: GitHubService,
+                                            private val mPersistenceRepository: PresenterStateRepository)
     : BasePresenterImpl<MainContract.MainView>(), MainContract.MainPresenter {
 
     private var mData: List<GithubRepoResponseModel>? = null
@@ -39,6 +41,16 @@ class MainPresenterImpl @Inject constructor(private val mApiService: GitHubServi
 
     override fun onItemClicked(it: GithubRepoResponseModel) {
         mBoundView?.showDetailsView(it)
+    }
+
+    override fun saveState() {
+        //we persist a copy of the data in repository to restore later
+        mPersistenceRepository.persist(ArrayList(mData), javaClass.simpleName)
+    }
+
+    override fun restoreState() {
+        //we retrieve the stored data
+        mData = mPersistenceRepository.retrieve<ArrayList<GithubRepoResponseModel>>(javaClass.simpleName)
     }
 
     private fun fetchData(userName: String) {

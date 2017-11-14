@@ -29,5 +29,17 @@ object BaseContract {
     interface BasePresenter<in T : BaseView> : Serializable {
         fun bind(view: T)
         fun unbind()
+
+        /**
+         * Call this method if you want to persist a state of current presenter type.
+         * The state will be retrieved next time you will call "restoreState" method on
+         * presenter of the same type
+         */
+        fun saveState()
+
+        /**
+         * Restore the state that was stored for this presenter type.
+         */
+        fun restoreState()
     }
 }

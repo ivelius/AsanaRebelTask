@@ -19,4 +19,6 @@ abstract class BasePresenterImpl<T : BaseContract.BaseView> : BaseContract.BaseP
         mBoundView = null
         mDisposablesBag.clear()
     }
+
+
 }

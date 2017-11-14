@@ -16,26 +16,21 @@ import javax.inject.Inject
 
 class MainActivity : BaseActivity(), MainContract.MainView {
 
-    @Inject lateinit var mMainPresenter: MainContract.MainPresenter
+    @Inject lateinit var mPresenter: MainContract.MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         App.appComponent.inject(this)
-
-        val presenter = savedInstanceState?.getSerializable(BUNDLE_KEY_PRESENTER) as? MainContract.MainPresenter
-        presenter?.let {
-            mMainPresenter = it
-        }
-
         initView()
-        mMainPresenter.bind(this)
+        mPresenter.restoreState()
+        mPresenter.bind(this)
     }
 
     private fun initView() {
         initActionBar()
         initRecyclerView()
-        fab_btn.setOnClickListener { mMainPresenter.onFabClicked() }
+        fab_btn.setOnClickListener { mPresenter.onFabClicked() }
         empty_view.visibility = View.VISIBLE
     }
 
@@ -51,13 +46,13 @@ class MainActivity : BaseActivity(), MainContract.MainView {
 
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putSerializable(BUNDLE_KEY_PRESENTER, mMainPresenter)
+        mPresenter.saveState()
         super.onSaveInstanceState(outState)
     }
 
     override fun showRepositories(repos: List<GithubRepoResponseModel>) {
         recycler_view?.adapter = ReposAdapter(repos, {
-            mMainPresenter.onItemClicked(it)
+            mPresenter.onItemClicked(it)
         })
 
         if (repos.isEmpty()) {

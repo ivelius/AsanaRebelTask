@@ -5,6 +5,8 @@ import com.asanarebel.yanbraslavski.asanarebeltask.details.DetailsContract
 import com.asanarebel.yanbraslavski.asanarebeltask.details.DetailsPresenterImpl
 import com.asanarebel.yanbraslavski.asanarebeltask.main.MainContract
 import com.asanarebel.yanbraslavski.asanarebeltask.main.MainPresenterImpl
+import com.asanarebel.yanbraslavski.asanarebeltask.persistence.PresenterStateRepository
+import com.asanarebel.yanbraslavski.asanarebeltask.persistence.impl.PresenterStateRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -17,13 +19,18 @@ open class AppModule {
     open fun provideApi() = GitHubService.create()
 
     @Provides
-    open fun provideMainPresenter(apiService: GitHubService): MainContract.MainPresenter {
-        return MainPresenterImpl(apiService)
+    open fun provideMainPresenter(apiService: GitHubService, persistenceRepository: PresenterStateRepository):
+            MainContract.MainPresenter {
+        return MainPresenterImpl(apiService, persistenceRepository)
     }
 
     @Provides
-    open fun provideDetailsPresenterImpl(apiService: GitHubService): DetailsContract.DetailsPresenter {
-        return DetailsPresenterImpl(apiService)
+    open fun provideDetailsPresenterImpl(apiService: GitHubService, persistenceRepository: PresenterStateRepository):
+            DetailsContract.DetailsPresenter {
+        return DetailsPresenterImpl(apiService, persistenceRepository)
     }
 
+    @Singleton
+    @Provides
+    open fun providePresenterStateRepository(): PresenterStateRepository = PresenterStateRepositoryImpl()
 }

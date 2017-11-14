@@ -1,6 +1,5 @@
 package com.affinitas.task.di.app
 
-import com.affinitas.task.api.GitHubService
 import com.asanarebel.yanbraslavski.asanarebeltask.details.DetailsActivity
 import com.asanarebel.yanbraslavski.asanarebeltask.main.MainActivity
 import dagger.Component
