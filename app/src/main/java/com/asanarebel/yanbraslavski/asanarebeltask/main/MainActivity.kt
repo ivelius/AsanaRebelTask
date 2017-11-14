@@ -1,48 +1,40 @@
 package com.asanarebel.yanbraslavski.asanarebeltask.main
 
-import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
+import android.widget.Toast
 import com.asanarebel.yanbraslavski.asanarebeltask.App
 import com.asanarebel.yanbraslavski.asanarebeltask.R
 import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.GithubRepoResponseModel
+import com.asanarebel.yanbraslavski.asanarebeltask.base.BaseActivity
+import com.asanarebel.yanbraslavski.asanarebeltask.details.DetailsActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), MainContract.MainView {
 
-    companion object {
-        private val BUNDLE_KEY_PRESENTER = "presenter"
-    }
+class MainActivity : BaseActivity(), MainContract.MainView {
 
-    @Inject lateinit var mMainPresenter: MainContract.MainPresenter
+    @Inject lateinit var mPresenter: MainContract.MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         App.appComponent.inject(this)
-
-        val presenter = savedInstanceState?.getSerializable(BUNDLE_KEY_PRESENTER) as? MainContract.MainPresenter
-        presenter?.let {
-            mMainPresenter = it
-        }
-
         initView()
-        mMainPresenter.bind(this)
+        mPresenter.restoreState()
+        mPresenter.bind(this)
     }
 
     private fun initView() {
         initActionBar()
         initRecyclerView()
-        fab_btn.setOnClickListener { mMainPresenter.onFabClicked() }
+        fab_btn.setOnClickListener { mPresenter.onFabClicked() }
         empty_view.visibility = View.VISIBLE
     }
 
@@ -63,34 +55,13 @@ class MainActivity : AppCompatActivity(), MainContract.MainView {
 
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putSerializable(BUNDLE_KEY_PRESENTER, mMainPresenter)
+        mPresenter.saveState()
         super.onSaveInstanceState(outState)
-    }
-
-    override fun showMessage(message: String) {
-        Snackbar.make(fab_btn, message, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-    }
-
-    override fun showLoading() {
-        loading_overlay?.let {
-            it.visibility = View.VISIBLE
-            it.animate().alpha(1f)
-        }
-    }
-
-    override fun stopLoading() {
-        loading_overlay?.let {
-            it.visibility = View.VISIBLE
-            it.animate().alpha(0f).withEndAction({
-                it.visibility = View.GONE
-            })
-        }
     }
 
     override fun showRepositories(repos: List<GithubRepoResponseModel>) {
         recycler_view?.adapter = ReposAdapter(repos, {
-            mMainPresenter?.onItemClicked(it)
+            mPresenter.onItemClicked(it)
         })
 
         if (repos.isEmpty()) {
@@ -101,19 +72,8 @@ class MainActivity : AppCompatActivity(), MainContract.MainView {
         }
     }
 
-    override fun changeTitle(title: String) {
-        supportActionBar?.title = title
-    }
-
-    override fun showDetailsView(it: GithubRepoResponseModel) {
-        showMessage("Clicked on ${it.name}")
-    }
-
-    override fun showError(errorMessage: String) {
-        val snack = Snackbar.make(toolbar, errorMessage, Snackbar.LENGTH_LONG)
-        val tv = snack.view.findViewById<TextView>(android.support.design.R.id.snackbar_text) as TextView
-        tv.setTextColor(Color.RED)
-        snack.show()
+    override fun showDetailsView() {
+        startActivity(Intent(this, DetailsActivity::class.java))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -127,7 +87,10 @@ class MainActivity : AppCompatActivity(), MainContract.MainView {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
-            R.id.action_settings -> return true
+            R.id.action_settings -> {
+                Toast.makeText(this, "No settings for this app", Toast.LENGTH_SHORT).show()
+                return true
+            }
             else -> return super.onOptionsItemSelected(item)
         }
     }

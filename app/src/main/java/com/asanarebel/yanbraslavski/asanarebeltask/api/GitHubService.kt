@@ -2,6 +2,7 @@ package com.affinitas.task.api
 
 import com.asanarebel.yanbraslavski.asanarebeltask.BuildConfig
 import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.GithubRepoResponseModel
+import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.SubscribersResponseModel
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,6 +19,10 @@ interface GitHubService {
 
     @GET("/users/{username}/repos")
     fun getRepositories(@Path("username") username: String): Observable<List<GithubRepoResponseModel>>
+
+    @GET("/repos/{username}/{repoName}/subscribers")
+    fun getRepoSubscribers(@Path("username") username: String, @Path("repoName") repoName: String):
+            Observable<List<SubscribersResponseModel>>
 
     companion object {
 

@@ -1,28 +1,24 @@
 package com.asanarebel.yanbraslavski.asanarebeltask.main
 
-import android.util.Log
 import com.affinitas.task.api.GitHubService
 import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.GithubRepoResponseModel
+import com.asanarebel.yanbraslavski.asanarebeltask.mvp.BasePresenterImpl
+import com.asanarebel.yanbraslavski.asanarebeltask.persistence.PresenterStateRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
  * Created by yan.braslavski on 11/13/17.
  */
-class MainPresenter @Inject constructor(private val mApiService: GitHubService)
-    : MainContract.MainPresenter {
+class MainPresenterImpl @Inject constructor(private val mApiService: GitHubService,
+                                            private val mPersistenceRepository: PresenterStateRepository)
+    : BasePresenterImpl<MainContract.MainView>(), MainContract.MainPresenter {
 
-
-    private val mDisposablesBag: CompositeDisposable = CompositeDisposable()
-    private var mBoundView: MainContract.MainView? = null
     private var mData: List<GithubRepoResponseModel>? = null
 
     override fun bind(view: MainContract.MainView) {
-        mBoundView = view
-
-        Log.d("tag", "Injected service is $mApiService")
+        super.bind(view)
 
         //if data already exists we show it without fetching
         mData?.let {
@@ -44,12 +40,24 @@ class MainPresenter @Inject constructor(private val mApiService: GitHubService)
     }
 
     override fun onItemClicked(it: GithubRepoResponseModel) {
-        mBoundView?.showDetailsView(it)
+        //We pass data to a new presenter through persistence layer (which is a part of our data model)
+        //This approach is advocated by many notorious Android Engineers , which I also like a lot.
+        val repoName = it.name
+        mData?.first()?.let {
+            mPersistenceRepository.persist(it.owner.login, PresenterStateRepository.USERNAME_KEY)
+            mPersistenceRepository.persist(repoName, PresenterStateRepository.REPONAME_KEY)
+            mBoundView?.showDetailsView()
+        }
     }
 
-    override fun unbind() {
-        mBoundView = null
-        mDisposablesBag.clear()
+    override fun saveState() {
+        //we persist a copy of the data in repository to restore later
+        mPersistenceRepository.persist(ArrayList(mData), javaClass.simpleName)
+    }
+
+    override fun restoreState() {
+        //we retrieve the stored data
+        mData = mPersistenceRepository.retrieve<ArrayList<GithubRepoResponseModel>>(javaClass.simpleName)
     }
 
     private fun fetchData(userName: String) {
