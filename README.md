@@ -32,4 +32,4 @@ There are Unit tests for Presenters that run on host JVM , and some UI tests tha
 
 This is how the app looks like once you run it and search for results.
 
-[![ScreenShot](https://github.com/ivelius/AsanaRebelTask/blob/master/screenshot1.png?raw=true)](https://github.com/ivelius/PersonalityTestApp/blob/master/screenshot1.png?raw=true)
+[![ScreenShot](https://raw.githubusercontent.com/ivelius/AsanaRebelTask/master/screenshot1.png)](https://raw.githubusercontent.com/ivelius/AsanaRebelTask/master/screenshot1.png)
