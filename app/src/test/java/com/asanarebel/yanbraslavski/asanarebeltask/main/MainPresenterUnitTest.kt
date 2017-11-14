@@ -1,6 +1,6 @@
 package com.asanarebel.yanbraslavski.asanarebeltask.main
 
-import com.affinitas.task.api.ApiService
+import com.affinitas.task.api.GitHubService
 import com.affinitas.task.utils.RxUtils
 import com.nhaarman.mockito_kotlin.mock
 import org.junit.After
@@ -11,7 +11,7 @@ import org.junit.Test
  */
 class MainPresenterUnitTest {
     private val mBoundView: MainContract.MainView = mock()
-    private val apiService: ApiService = mock()
+    private val apiService: GitHubService = mock()
     private lateinit var mPresenterUnderTest: MainContract.MainPresenter
 
     @Before
@@ -31,6 +31,6 @@ class MainPresenterUnitTest {
     @Test
     fun verifyShowDataCalled() {
 //        mPresenterUnderTest.bind(mBoundView)
-//        verify(mBoundView, times(1)).showData(any())
+//        verify(mBoundView, times(1)).showRepositories(any())
     }
 }
