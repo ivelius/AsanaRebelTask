@@ -7,7 +7,8 @@ import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -17,10 +18,14 @@ import com.asanarebel.yanbraslavski.asanarebeltask.R
 import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.GithubRepoResponseModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, MainContract.MainView {
 
+    companion object {
+        private val BUNDLE_KEY_PRESENTER = "presenter"
+    }
 
     @Inject lateinit var mMainPresenter: MainContract.MainPresenter
 
@@ -29,20 +34,42 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         App.appComponent.inject(this)
 
-        val presenter = savedInstanceState?.getSerializable("presenter") as? MainContract.MainPresenter
+        val presenter = savedInstanceState?.getSerializable(BUNDLE_KEY_PRESENTER) as? MainContract.MainPresenter
         presenter?.let {
             mMainPresenter = it
         }
 
-        setSupportActionBar(toolbar)
-        fab_btn.setOnClickListener { mMainPresenter.onFabClicked() }
-        initNavigationDrawer()
+        initView()
         mMainPresenter.bind(this)
+    }
+
+    private fun initView() {
+        initActionBar()
+        initNavigationDrawer()
+        initRecyclerView()
+        fab_btn.setOnClickListener { mMainPresenter.onFabClicked() }
+        empty_view.visibility = View.VISIBLE
+    }
+
+
+    private fun initActionBar() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = ""
+    }
+
+    private fun initRecyclerView() {
+        recycler_view?.let {
+            val linearLayoutManager = LinearLayoutManager(it.context)
+            it.layoutManager = linearLayoutManager
+            val dividerItemDecoration = DividerItemDecoration(it.context,
+                    linearLayoutManager.orientation)
+            it.addItemDecoration(dividerItemDecoration)
+        }
     }
 
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putSerializable("presenter", mMainPresenter)
+        outState?.putSerializable(BUNDLE_KEY_PRESENTER, mMainPresenter)
         super.onSaveInstanceState(outState)
     }
 
@@ -83,8 +110,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun showData(data: List<GithubRepoResponseModel>) {
-        Log.d("tag", "data is $data")
+    override fun showRepositories(repos: List<GithubRepoResponseModel>) {
+        recycler_view?.adapter = ReposAdapter(repos, {
+            mMainPresenter?.onItemClicked(it)
+        })
+
+        if (repos.isEmpty()) {
+            empty_view.text = getString(R.string.no_repos)
+            empty_view.visibility = View.VISIBLE
+        } else {
+            empty_view.visibility = View.GONE
+        }
+    }
+
+    override fun changeTitle(title: String) {
+        supportActionBar?.title = title
+    }
+
+    override fun showDetailsView(it: GithubRepoResponseModel) {
+        showMessage("Clicked on ${it.name}")
     }
 
     override fun showError(errorMessage: String) {

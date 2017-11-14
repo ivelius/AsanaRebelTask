@@ -14,9 +14,11 @@ object MainContract {
     interface MainView : BaseContract.BaseView {
         fun showMessage(message: String)
         fun showLoading()
-        fun showData(data: List<GithubRepoResponseModel>)
+        fun showRepositories(repos: List<GithubRepoResponseModel>)
         fun stopLoading()
-        fun showError(wrapErrorMessage: String)
+        fun showError(errorMessage: String)
+        fun showDetailsView(it: GithubRepoResponseModel)
+        fun changeTitle(title: String)
     }
 
     /**
@@ -25,5 +27,6 @@ object MainContract {
      */
     interface MainPresenter : BaseContract.BasePresenter<MainView> {
         fun onFabClicked()
+        fun onItemClicked(it: GithubRepoResponseModel)
     }
 }

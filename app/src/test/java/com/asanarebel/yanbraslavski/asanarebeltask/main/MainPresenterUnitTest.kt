@@ -31,6 +31,6 @@ class MainPresenterUnitTest {
     @Test
     fun verifyShowDataCalled() {
 //        mPresenterUnderTest.bind(mBoundView)
-//        verify(mBoundView, times(1)).showData(any())
+//        verify(mBoundView, times(1)).showRepositories(any())
     }
 }

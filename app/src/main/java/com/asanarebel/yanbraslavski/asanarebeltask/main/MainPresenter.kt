@@ -14,6 +14,7 @@ import javax.inject.Inject
 class MainPresenter @Inject constructor(private val mApiService: GitHubService)
     : MainContract.MainPresenter {
 
+
     private val mDisposablesBag: CompositeDisposable = CompositeDisposable()
     private var mBoundView: MainContract.MainView? = null
     private var mData: List<GithubRepoResponseModel>? = null
@@ -31,12 +32,19 @@ class MainPresenter @Inject constructor(private val mApiService: GitHubService)
     }
 
     private fun showData(data: List<GithubRepoResponseModel>) {
-        mBoundView?.showData(data)
+        data.firstOrNull()?.owner?.login?.let {
+            mBoundView?.changeTitle(it)
+        }
+        mBoundView?.showRepositories(data)
     }
 
     override fun onFabClicked() {
         //Data fetching
         fetchData("JakeWharton")
+    }
+
+    override fun onItemClicked(it: GithubRepoResponseModel) {
+        mBoundView?.showDetailsView(it)
     }
 
     override fun unbind() {

@@ -8,7 +8,7 @@ import io.reactivex.Observable
  * Created by yan.braslavski on 10/28/17.
  */
 class ApiMock : GitHubService {
-    override fun getRepositories(username: String): Observable<GithubRepoResponseModel> {
+    override fun getRepositories(username: String): Observable<List<GithubRepoResponseModel>> {
         //TODO : Fake it
         return Observable.empty()
     }
