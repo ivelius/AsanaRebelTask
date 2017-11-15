@@ -22,6 +22,5 @@ object DetailsContract {
      */
     interface DetailsPresenter : BaseContract.BasePresenter<DetailsView> {
         fun onItemClicked(it: SubscribersResponseModel)
-
     }
 }

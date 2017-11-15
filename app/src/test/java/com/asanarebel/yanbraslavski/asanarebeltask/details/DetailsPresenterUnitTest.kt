@@ -1,10 +1,6 @@
 package com.asanarebel.yanbraslavski.asanarebeltask.details
 
-import com.affinitas.task.api.GitHubService
-import com.affinitas.task.utils.RxUtils
 import com.asanarebel.yanbraslavski.asanarebeltask.BaseUnitTest
-import com.asanarebel.yanbraslavski.asanarebeltask.main.MainContract
-import com.nhaarman.mockito_kotlin.mock
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -12,22 +8,16 @@ import org.junit.Test
 /**
  * Test Suit for DetailsPresenter
  */
-class DetailsPresenterUnitTest : BaseUnitTest()  {
-    private val mBoundView: DetailsContract.DetailsPresenter = mock()
-    private val apiService: GitHubService = mock()
-    private lateinit var mPresenterUnderTest: MainContract.MainPresenter
+class DetailsPresenterUnitTest : BaseUnitTest() {
 
     @Before
-    fun setUp() {
-        RxUtils.makeRxSchedulersImmediate()
-//        val personalityTestResponseModel = PersonalityTestResponseModel(emptyList(), emptyList())
-//        Mockito.`when`(apiService.fetchData()).thenReturn(Observable.just(personalityTestResponseModel))
-//        mPresenterUnderTest = MainContract.MainPresenter(apiService)
+    override fun setUp() {
+        super.setUp()
     }
 
     @After
-    fun tearDown() {
-        RxUtils.resetRxSchedulers()
+    override fun tearDown() {
+        super.tearDown()
     }
 
     /**
@@ -44,7 +34,7 @@ class DetailsPresenterUnitTest : BaseUnitTest()  {
      */
     @Test
     fun testSaveAndRestoreState() {
-
+        //TODO :
     }
 
     /**
@@ -53,7 +43,7 @@ class DetailsPresenterUnitTest : BaseUnitTest()  {
      */
     @Test
     fun testShowCachedDataOnBind() {
-
+        //TODO :
     }
 
     /**
@@ -62,7 +52,7 @@ class DetailsPresenterUnitTest : BaseUnitTest()  {
      */
     @Test
     fun testDataLoadOnBind() {
-
+        //TODO :
     }
 
     /**
@@ -70,7 +60,7 @@ class DetailsPresenterUnitTest : BaseUnitTest()  {
      */
     @Test
     fun testShowError() {
-
+        //TODO :
     }
 
 

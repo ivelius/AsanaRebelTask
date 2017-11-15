@@ -4,18 +4,21 @@ import android.content.Intent
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.assertion.ViewAssertions
 import android.support.test.espresso.matcher.ViewMatchers
+import android.support.test.espresso.matcher.ViewMatchers.withId
+import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.filters.SmallTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import com.affinitas.task.di.app.DaggerAppComponent
-import com.affinitas.task.di.app.TestAppModule
-import com.affinitas.task.utils.RxUtils
-import com.asanarebel.yanbraslavski.asanarebeltask.App
+import com.asanarebel.yanbraslavski.asanarebeltask.BaseActivityTest
+import com.asanarebel.yanbraslavski.asanarebeltask.R
+import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.SubscribersResponseModel
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -23,7 +26,7 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 @SmallTest
-class DetailsActivityTest {
+class DetailsActivityTest : BaseActivityTest() {
 
     @Rule
     @JvmField
@@ -32,22 +35,13 @@ class DetailsActivityTest {
                     false)
 
     @Before
-    fun setup() {
-        //Replace the app component by our test component
-        App.appComponent = DaggerAppComponent.builder()
-                .appModule(TestAppModule())
-                .build()
-
-        RxUtils.makeRxSchedulersImmediate()
-
-        val startIntent = Intent()
-        mActivityTestRule.launchActivity(startIntent)
+    override fun setup() {
+        super.setup()
     }
 
     @After
-    fun tearDown() {
-        RxUtils.resetRxSchedulers()
-//        Espresso.unregisterIdlingResources()
+    override fun tearDown() {
+        super.tearDown()
     }
 
 
@@ -57,27 +51,46 @@ class DetailsActivityTest {
      */
     @Test
     fun testAllUiElementsAreDisplayed() {
-        // Check that the note title, description and image are displayed
-        Espresso.onView(ViewMatchers.withText("PersonalityTestApp")).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        mActivityTestRule.launchActivity(Intent())
+
+        // star image is displayed
+        Espresso.onView(withId(R.id.star_image_view))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+
+        // total subscribers title is displayed
+        Espresso.onView(allOf(withId(R.id.total_subscribers_stext_view),
+                withText(mActivityTestRule.activity.getString(R.string.total_subscribers))))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
 
     /**
-     * When user taps a list item , activity should navigate to detailed Activity
-     */
-    @Test
-    fun testItemClick() {
-        // Check that the note title, description and image are displayed
-        Espresso.onView(ViewMatchers.withText("PersonalityTestApp")).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-    }
-
-    /**
-     * When data cannot be fetched due to error , the error should be displayed to the user
+     * When data cannot be fetched due to error ,
+     * the error should be displayed to the user
      */
     @Test
     fun testErrorFetchingData() {
-        // Check that the note title, description and image are displayed
-        Espresso.onView(ViewMatchers.withText("PersonalityTestApp")).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        //We are taking advantage of the fact that our TestAppModule
+        //supplying mocked presenter for this activity using DI
+        val errorMessage = "No Luck :("
+        val activityPresenter = object : DetailsContract.DetailsPresenter {
+            override fun onItemClicked(it: SubscribersResponseModel) {}
+            override fun bind(view: DetailsContract.DetailsView) {
+                view.showError(errorMessage)
+            }
+            override fun unbind() {}
+            override fun saveState() {}
+            override fun restoreState() {}
+        }
+
+        mTestAppNodule.mMockedDetailsPresenter = activityPresenter
+
+        //now launch the activity
+        mActivityTestRule.launchActivity(Intent())
+
+        //make sure error message displayed in a snack bar
+        Espresso.onView(allOf(withId(android.support.design.R.id.snackbar_text), withText(errorMessage)))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     /**
@@ -86,8 +99,7 @@ class DetailsActivityTest {
      */
     @Test
     fun testSetTitle() {
-        // Check that the note title, description and image are displayed
-        Espresso.onView(ViewMatchers.withText("PersonalityTestApp")).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        //TODO :
     }
 
     /**
@@ -96,8 +108,7 @@ class DetailsActivityTest {
      */
     @Test
     fun testSetSubscribersCount() {
-        // Check that the note title, description and image are displayed
-        Espresso.onView(ViewMatchers.withText("PersonalityTestApp")).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        //TODO :
     }
 
     /**
@@ -106,8 +117,6 @@ class DetailsActivityTest {
      */
     @Test
     fun testValidDataLoad() {
-        // Check that the note title, description and image are displayed
-        Espresso.onView(ViewMatchers.withText("PersonalityTestApp")).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        //TODO
     }
-
 }

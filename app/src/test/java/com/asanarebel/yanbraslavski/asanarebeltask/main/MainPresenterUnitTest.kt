@@ -30,14 +30,14 @@ class MainPresenterUnitTest : BaseUnitTest() {
     private val persistenceRepository: PresenterStateRepository = mock()
 
     @Before
-    fun setUp() {
+    override fun setUp() {
         //We are not really interested in testing multithreaded loading at this point
         //So we just constrain all Rx operations for a single thread
         RxUtils.makeRxSchedulersImmediate()
     }
 
     @After
-    fun tearDown() {
+    override fun tearDown() {
         RxUtils.resetRxSchedulers()
     }
 
@@ -133,16 +133,16 @@ class MainPresenterUnitTest : BaseUnitTest() {
         //fake clicked item
         val username = "usernameValue"
         val repoName = "repoName"
-        val owner = Owner(username,"")
-        val fakeItem = GithubRepoResponseModel(repoName,owner,"",4)
+        val owner = Owner(username, "")
+        val fakeItem = GithubRepoResponseModel(repoName, owner, "", 4)
 
         //update search query and perform the click
         presenter.onSearchQueryUpdate(username)
         presenter.onItemClicked(fakeItem)
 
         //verify data is stored and new view is about to be presented
-        verify(persistenceRepository).persist(username,PresenterStateRepository.USERNAME_KEY)
-        verify(persistenceRepository).persist(repoName,PresenterStateRepository.REPONAME_KEY)
+        verify(persistenceRepository).persist(username, PresenterStateRepository.USERNAME_KEY)
+        verify(persistenceRepository).persist(repoName, PresenterStateRepository.REPONAME_KEY)
         verify(view).showDetailsView()
     }
 

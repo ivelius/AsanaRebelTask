@@ -9,4 +9,5 @@
     <string name="no_repos">No repos for this user</string>
     <string name="no_subscribers">No subscribers found for current repo</string>
     <string name="search_hint">Github username</string>
+    <string name="total_subscribers">Total Subscribers :</string>
 </resources>

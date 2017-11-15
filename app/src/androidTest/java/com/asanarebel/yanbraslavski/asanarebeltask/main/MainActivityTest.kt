@@ -5,7 +5,6 @@ import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions
-import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import android.support.test.espresso.matcher.ViewMatchers.*
@@ -15,10 +14,7 @@ import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.SearchView
 import android.view.KeyEvent
 import android.widget.AutoCompleteTextView
-import com.affinitas.task.di.app.DaggerAppComponent
-import com.affinitas.task.di.app.TestAppModule
-import com.affinitas.task.utils.RxUtils
-import com.asanarebel.yanbraslavski.asanarebeltask.App
+import com.asanarebel.yanbraslavski.asanarebeltask.BaseActivityTest
 import com.asanarebel.yanbraslavski.asanarebeltask.R
 import com.asanarebel.yanbraslavski.asanarebeltask.details.DetailsActivity
 import com.asanarebel.yanbraslavski.asanarebeltask.main.MainActivity
@@ -40,7 +36,7 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 @SmallTest
-class MainActivityTest {
+class MainActivityTest : BaseActivityTest() {
 
     @Rule
     @JvmField
@@ -49,28 +45,15 @@ class MainActivityTest {
                     false)
 
     @Before
-    fun setup() {
-
-        //Intents framework needed to test navigation between activities
-        Intents.init()
-        //Replace the app component modules with our test modules
-        App.appComponent = DaggerAppComponent
-                .builder()
-                .appModule(TestAppModule())
-                .build()
-
-        //since we use RxKotlin , we need to adjust schedulers to espresso , so it could wait
-        //while background operations are not complete
-        RxUtils.prepareSchedulersForEspressoTesting()
-
+    override fun setup() {
+        super.setup()
         //launch activity using empty intent (no arguments needed for now ...)
         mActivityTestRule.launchActivity(Intent())
     }
 
     @After
-    fun tearDown() {
-        RxUtils.resetRxSchedulers()
-        Intents.release()
+    override fun tearDown() {
+        super.tearDown()
     }
 
     /**
