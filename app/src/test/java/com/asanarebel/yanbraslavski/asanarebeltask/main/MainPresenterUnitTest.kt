@@ -2,6 +2,7 @@ package com.asanarebel.yanbraslavski.asanarebeltask.main
 
 import com.affinitas.task.api.GitHubService
 import com.affinitas.task.utils.RxUtils
+import com.asanarebel.yanbraslavski.asanarebeltask.BaseUnitTest
 import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.GithubRepoResponseModel
 import com.asanarebel.yanbraslavski.asanarebeltask.persistence.PresenterStateRepository
 import com.nhaarman.mockito_kotlin.any
@@ -16,15 +17,12 @@ import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import java.io.Serializable
-import kotlin.reflect.KMutableProperty
-import kotlin.reflect.jvm.isAccessible
-import kotlin.reflect.memberProperties
 
 
 /**
  * Test Suit for MainPresenter
  */
-class MainPresenterUnitTest {
+class MainPresenterUnitTest : BaseUnitTest() {
 
     companion object {
         private val USERNAME = "jakeworthon"
@@ -104,17 +102,7 @@ class MainPresenterUnitTest {
         assertNull(getPrivateMember(p3, "mData"))
     }
 
-    private fun getPrivateMember(instance: Any, fieldName: String): Any? {
-        val prop = instance::class.memberProperties.find { it.name == fieldName } as KMutableProperty<*>
-        prop.getter.isAccessible = true
-        return prop.getter.call(instance)
-    }
 
-    private fun setPrivateField(instance: Any, setData: Any, fieldName: String) {
-        val p1Data = instance::class.memberProperties.find { it.name == fieldName } as KMutableProperty<*>
-        p1Data.setter.isAccessible = true
-        p1Data.setter.call(instance, setData)
-    }
 
     /**
      * Whenever presenter has stored data ,

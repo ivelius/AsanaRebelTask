@@ -1,8 +1,9 @@
-package com.asanarebel.yanbraslavski.asanarebeltask.main
+package com.asanarebel.yanbraslavski.asanarebeltask.details
 
 import com.affinitas.task.api.GitHubService
 import com.affinitas.task.utils.RxUtils
-import com.asanarebel.yanbraslavski.asanarebeltask.details.DetailsContract
+import com.asanarebel.yanbraslavski.asanarebeltask.BaseUnitTest
+import com.asanarebel.yanbraslavski.asanarebeltask.main.MainContract
 import com.nhaarman.mockito_kotlin.mock
 import org.junit.After
 import org.junit.Before
@@ -11,7 +12,7 @@ import org.junit.Test
 /**
  * Test Suit for DetailsPresenter
  */
-class DetailsPresenterUnitTest {
+class DetailsPresenterUnitTest : BaseUnitTest()  {
     private val mBoundView: DetailsContract.DetailsPresenter = mock()
     private val apiService: GitHubService = mock()
     private lateinit var mPresenterUnderTest: MainContract.MainPresenter
