@@ -3,8 +3,7 @@ package com.affinitas.task.main
 import android.content.Intent
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
-import android.support.test.espresso.matcher.ViewMatchers.withText
+import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.filters.SmallTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
@@ -12,7 +11,9 @@ import com.affinitas.task.di.app.DaggerAppComponent
 import com.affinitas.task.di.app.TestAppModule
 import com.affinitas.task.utils.RxUtils
 import com.asanarebel.yanbraslavski.asanarebeltask.App
+import com.asanarebel.yanbraslavski.asanarebeltask.R
 import com.asanarebel.yanbraslavski.asanarebeltask.main.MainActivity
+import com.asanarebel.yanbraslavski.asanarebeltask.utils.EspressoCustomMarchers.Companion.withToolbarTitle
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -60,8 +61,24 @@ class MainActivityTest {
      */
     @Test
     fun testAllUiElementsAreDisplayed() {
-        // Check that the note title, description and image are displayed
-        onView(withText("PersonalityTestApp")).check(matches(isDisplayed()))
+        val activityUnderTest = mActivityTestRule.activity
+
+        // Check that empty string and its content are visible and correct
+        onView(withId(R.id.empty_view_text_view)).check(matches(isDisplayed()))
+        onView(withId(R.id.empty_view_text_view))
+                .check(matches(withText(activityUnderTest.getString(R.string.click_to_load))))
+
+        //make sure title is empty
+        onView(withId(R.id.toolbar)).check(matches(withToolbarTitle("")))
+
+        //make sure search view is visible
+        onView(isAssignableFrom(android.support.v7.widget.SearchView::class.java))
+                .check(matches(isDisplayed()))
+
+        //make sure fab is visible
+        onView(isAssignableFrom(android.support.design.widget.FloatingActionButton::class.java))
+                .check(matches(isDisplayed()))
+
     }
 
     /**
