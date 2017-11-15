@@ -11,7 +11,7 @@ import javax.inject.Inject
 /**
  * Created by yan.braslavski on 11/13/17.
  */
-class DetailsPresenterImpl @Inject constructor(private val mApiService: GitHubService,
+open class DetailsPresenterImpl @Inject constructor(private val mApiService: GitHubService,
                                                private val mPersistenceRepository: PresenterStateRepository)
     : BasePresenterImpl<DetailsContract.DetailsView>(), DetailsContract.DetailsPresenter {
 

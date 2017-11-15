@@ -27,7 +27,7 @@ class DetailsActivity : BaseActivity(), DetailsContract.DetailsView {
     private fun initView() {
         supportActionBar?.title = ""
         initRecyclerView()
-        empty_view.visibility = View.VISIBLE
+        empty_view_text_view.visibility = View.VISIBLE
     }
 
     private fun initRecyclerView() {
@@ -55,10 +55,10 @@ class DetailsActivity : BaseActivity(), DetailsContract.DetailsView {
         })
 
         if (subscribersList.isEmpty()) {
-            empty_view.text = getString(R.string.no_repos)
-            empty_view.visibility = View.VISIBLE
+            empty_view_text_view.text = getString(R.string.no_repos)
+            empty_view_text_view.visibility = View.VISIBLE
         } else {
-            empty_view.visibility = View.GONE
+            empty_view_text_view.visibility = View.GONE
         }
     }
 

@@ -39,7 +39,7 @@ class MainActivity : BaseActivity(), MainContract.MainView {
         initActionBar()
         initRecyclerView()
         fab_btn.setOnClickListener { mPresenter.onSearchClicked() }
-        empty_view.visibility = View.VISIBLE
+        empty_view_text_view.visibility = View.VISIBLE
     }
 
     private fun initActionBar() {
@@ -69,10 +69,10 @@ class MainActivity : BaseActivity(), MainContract.MainView {
         })
 
         if (repos.isEmpty()) {
-            empty_view.text = getString(R.string.no_repos)
-            empty_view.visibility = View.VISIBLE
+            empty_view_text_view.text = getString(R.string.no_repos)
+            empty_view_text_view.visibility = View.VISIBLE
         } else {
-            empty_view.visibility = View.GONE
+            empty_view_text_view.visibility = View.GONE
         }
     }
 
