@@ -136,7 +136,8 @@ class MainPresenterUnitTest : BaseUnitTest() {
         val owner = Owner(username,"")
         val fakeItem = GithubRepoResponseModel(repoName,owner,"",4)
 
-        //perform the click
+        //update search query and perform the click
+        presenter.onSearchQueryUpdate(username)
         presenter.onItemClicked(fakeItem)
 
         //verify data is stored and new view is about to be presented
