@@ -11,8 +11,8 @@ import javax.inject.Inject
 /**
  * Created by yan.braslavski on 11/13/17.
  */
-class MainPresenterImpl @Inject constructor(private val mApiService: GitHubService,
-                                            private val mPersistenceRepository: PresenterStateRepository)
+open class MainPresenterImpl @Inject constructor(private val mApiService: GitHubService,
+                                                 private val mPersistenceRepository: PresenterStateRepository)
     : BasePresenterImpl<MainContract.MainView>(), MainContract.MainPresenter {
 
     private var mData: List<GithubRepoResponseModel>? = null
@@ -48,12 +48,9 @@ class MainPresenterImpl @Inject constructor(private val mApiService: GitHubServi
     override fun onItemClicked(it: GithubRepoResponseModel) {
         //We pass data to a new presenter through persistence layer (which is a part of our data model)
         //This approach is advocated by many notorious Android Engineers , which I also like a lot.
-        val repoName = it.name
-        mData?.first()?.let {
-            mPersistenceRepository.persist(it.owner.login, PresenterStateRepository.USERNAME_KEY)
-            mPersistenceRepository.persist(repoName, PresenterStateRepository.REPONAME_KEY)
-            mBoundView?.showDetailsView()
-        }
+        mPersistenceRepository.persist(mSearchQuery, PresenterStateRepository.USERNAME_KEY)
+        mPersistenceRepository.persist(it.name, PresenterStateRepository.REPONAME_KEY)
+        mBoundView?.showDetailsView()
     }
 
     override fun onSearchQueryUpdate(searchQuery: String) {

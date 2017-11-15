@@ -60,5 +60,11 @@ dependencies {
 
     /*Unit Tests*/
     testImplementation "com.nhaarman:mockito-kotlin:1.1.0"
-    testImplementation 'org.amshove.kluent:kluent:1.14'
+//    testImplementation 'org.amshove.kluent:kluent:1.14'
+
+//    testImplementation 'org.mockito:mockito-core:1.10.19'
+//    testImplementation 'org.powermock:powermock-api-mockito:1.6.4'
+//    testImplementation 'org.powermock:powermock-module-junit4:1.6.4'
+//    testImplementation 'org.powermock:powermock-core:1.6.4'
+    testImplementation 'org.powermock:powermock-api-mockito2:1.7.0'
 }

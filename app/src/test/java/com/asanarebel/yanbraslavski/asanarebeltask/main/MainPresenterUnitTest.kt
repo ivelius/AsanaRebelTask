@@ -4,9 +4,11 @@ import com.affinitas.task.api.GitHubService
 import com.affinitas.task.utils.RxUtils
 import com.asanarebel.yanbraslavski.asanarebeltask.BaseUnitTest
 import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.GithubRepoResponseModel
+import com.asanarebel.yanbraslavski.asanarebeltask.api.models.responses.Owner
 import com.asanarebel.yanbraslavski.asanarebeltask.persistence.PresenterStateRepository
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.verify
 import io.reactivex.Observable
 import junit.framework.Assert.assertEquals
@@ -24,22 +26,14 @@ import java.io.Serializable
  */
 class MainPresenterUnitTest : BaseUnitTest() {
 
-    companion object {
-        private val USERNAME = "jakeworthon"
-    }
-
     private val apiService: GitHubService = mock()
     private val persistenceRepository: PresenterStateRepository = mock()
-    private lateinit var mPresenterUnderTest: MainContract.MainPresenter
 
     @Before
     fun setUp() {
         //We are not really interested in testing multithreaded loading at this point
         //So we just constrain all Rx operations for a single thread
         RxUtils.makeRxSchedulersImmidiate()
-
-        //mock the service to return some empty data
-        Mockito.`when`(apiService.getRepositories(USERNAME)).thenReturn(Observable.just(emptyList()))
     }
 
     @After
@@ -58,7 +52,6 @@ class MainPresenterUnitTest : BaseUnitTest() {
      * Expected :
      * The second presenter instance should have the same state as the first instance.
      * The third presenter instance should should have now  default state (reset)
-     *
      */
     @Test
     fun testSaveAndRestoreState() {
@@ -103,7 +96,6 @@ class MainPresenterUnitTest : BaseUnitTest() {
     }
 
 
-
     /**
      * Whenever presenter has stored data ,
      * it should be immediately shown to the view
@@ -111,15 +103,18 @@ class MainPresenterUnitTest : BaseUnitTest() {
     @Test
     fun testShowCachedDataOnBind() {
 
-    }
+        //create fake data list
+        val fakeData = ArrayList<GithubRepoResponseModel>()
 
-    /**
-     * Whenever presenter has no stored data ,
-     * it should load the data from server and provide it to the view
-     */
-    @Test
-    fun testDataLoadOnBind() {
+        //initialize presenter and put data in it
+        val presenter = MainPresenterImpl(apiService, persistenceRepository)
+        setPrivateField(presenter, fakeData, "mData")
+        val presenterSpy = spy(presenter)
+        val mainView: MainContract.MainView = mock()
 
+        //verify show data was called on the view immediately after we bind the view
+        presenterSpy.bind(mainView)
+        verify(mainView).showRepositories(any())
     }
 
     /**
@@ -130,6 +125,24 @@ class MainPresenterUnitTest : BaseUnitTest() {
     @Test
     fun testRepoItemClicked() {
 
+        //initialize presenter and bind a view to it
+        val presenter = spy(MainPresenterImpl(apiService, persistenceRepository))
+        val view: MainContract.MainView = mock()
+        presenter.bind(view)
+
+        //fake clicked item
+        val username = "usernameValue"
+        val repoName = "repoName"
+        val owner = Owner(username,"")
+        val fakeItem = GithubRepoResponseModel(repoName,owner,"",4)
+
+        //perform the click
+        presenter.onItemClicked(fakeItem)
+
+        //verify data is stored and new view is about to be presented
+        verify(persistenceRepository).persist(username,PresenterStateRepository.USERNAME_KEY)
+        verify(persistenceRepository).persist(repoName,PresenterStateRepository.REPONAME_KEY)
+        verify(view).showDetailsView()
     }
 
     /**
@@ -139,7 +152,15 @@ class MainPresenterUnitTest : BaseUnitTest() {
      */
     @Test
     fun testSearch() {
+        //initialize presenter and put data in it
+        val presenter = MainPresenterImpl(apiService, persistenceRepository)
 
+        val updatedQuery = "newQuery"
+        presenter.onSearchQueryUpdate(updatedQuery)
+
+        //we verify that view show repositories was called
+        val storedQuery = getPrivateMember(presenter, "mSearchQuery")
+        assertEquals(storedQuery, updatedQuery)
     }
 
     /**
@@ -147,7 +168,17 @@ class MainPresenterUnitTest : BaseUnitTest() {
      */
     @Test
     fun testShowError() {
+        //mock the service to throw error while retrieving data
+        Mockito.`when`(apiService.getRepositories(any()))
+                .thenReturn(Observable.error(Throwable("Intentional Exception")))
 
+        //initialize presenter and put data in it
+        val presenter = spy(MainPresenterImpl(apiService, persistenceRepository))
+        val view: MainContract.MainView = mock()
+        presenter.bind(view)
+
+        presenter.onSearchClicked()
+        verify(view).showError(any())
     }
 
 
