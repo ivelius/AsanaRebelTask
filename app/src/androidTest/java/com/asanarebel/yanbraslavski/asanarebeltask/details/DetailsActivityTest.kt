@@ -38,7 +38,7 @@ class DetailsActivityTest {
                 .appModule(TestAppModule())
                 .build()
 
-        RxUtils.makeRxSchedulersImmidiate()
+        RxUtils.makeRxSchedulersImmediate()
 
         val startIntent = Intent()
         mActivityTestRule.launchActivity(startIntent)

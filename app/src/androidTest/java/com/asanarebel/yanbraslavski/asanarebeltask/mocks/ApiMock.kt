@@ -11,12 +11,12 @@ import io.reactivex.Observable
 class ApiMock : GitHubService {
 
     override fun getRepoSubscribers(username: String, repoName: String): Observable<List<SubscribersResponseModel>> {
-        //TODO : Fake it
+        //TODO : Fake it to whatever you want
         return Observable.empty()
     }
 
     override fun getRepositories(username: String): Observable<List<GithubRepoResponseModel>> {
-        //TODO : Fake it
+        //TODO : Fake it to whatever you want
         return Observable.empty()
     }
 }

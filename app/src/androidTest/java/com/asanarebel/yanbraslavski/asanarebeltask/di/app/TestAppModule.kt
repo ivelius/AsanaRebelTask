@@ -1,15 +1,13 @@
 package com.affinitas.task.di.app
 
-import com.affinitas.task.api.GitHubService
-import com.affinitas.task.main.mocks.ApiMock
 import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 class TestAppModule : AppModule() {
 
-    @Provides
-    @Singleton
-    override fun provideApi(): GitHubService = ApiMock()
+    //TODO : In case we need to provide api that returns constant mocked objects
+    //TODO : we can uncomment this method
+//    @Provides
+//    @Singleton
+//    override fun provideApi(): GitHubService = ApiMock()
 }

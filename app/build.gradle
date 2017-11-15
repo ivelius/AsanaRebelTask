@@ -56,9 +56,18 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:3.0.1') {
+        // Necessary to avoid version conflicts
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude module: 'recyclerview-v7'
+    }
+    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.1'
     androidTestImplementation "com.nhaarman:mockito-kotlin:1.1.0"
 
     /*Unit Tests*/
     testImplementation "com.nhaarman:mockito-kotlin:1.1.0"
     testImplementation 'org.powermock:powermock-api-mockito2:1.7.0'
+
 }

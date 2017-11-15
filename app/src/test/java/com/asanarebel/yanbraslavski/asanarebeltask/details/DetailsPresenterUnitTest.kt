@@ -19,7 +19,7 @@ class DetailsPresenterUnitTest : BaseUnitTest()  {
 
     @Before
     fun setUp() {
-        RxUtils.makeRxSchedulersImmidiate()
+        RxUtils.makeRxSchedulersImmediate()
 //        val personalityTestResponseModel = PersonalityTestResponseModel(emptyList(), emptyList())
 //        Mockito.`when`(apiService.fetchData()).thenReturn(Observable.just(personalityTestResponseModel))
 //        mPresenterUnderTest = MainContract.MainPresenter(apiService)

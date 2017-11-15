@@ -33,7 +33,7 @@ class MainPresenterUnitTest : BaseUnitTest() {
     fun setUp() {
         //We are not really interested in testing multithreaded loading at this point
         //So we just constrain all Rx operations for a single thread
-        RxUtils.makeRxSchedulersImmidiate()
+        RxUtils.makeRxSchedulersImmediate()
     }
 
     @After

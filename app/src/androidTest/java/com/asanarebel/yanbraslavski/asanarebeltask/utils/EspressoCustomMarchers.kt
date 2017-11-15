@@ -28,5 +28,9 @@ class EspressoCustomMarchers {
                 }
             }
         }
+
+        fun withRecyclerView(recyclerViewId: Int): RecyclerViewMatcher {
+            return RecyclerViewMatcher(recyclerViewId)
+        }
     }
 }
