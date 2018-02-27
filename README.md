@@ -1,14 +1,14 @@
-# AsanaRebelTask
+# GithubApi
 This is a small app that fetches Github repositories for a user and presents some info on the screen.
 
 ## Language
-My language of choice for this task was Kotlin event though I am more proficient with Java and could've done it completely in Java. However there are plenty of other projects in my public repo that are written in Java.I am having fun so far using Kotlin , so I decided to have some fun during the task :)
+My language of choice for this task was Kotlin event though I am more proficient with Java and could've done it completely in Java. However there are plenty of other projects in my public repo that are written in Java.I am having fun so far using Kotlin , so I decided to have some fun :)
 
 ## Architechture
 I went with MVP , since it is fair simple and quite powerful . The perfect balance between complex solution and lack of architecture at all. MVP has proven to suite most of my needs during the years.
 
 ## UI
-Since I have a limited time , I've decided to keep things simple. Using a plain Material design provided by vanilla Android (which I find nice BTW). I don't use custom views nor Fragments for this task as they would rather add complexity than serve a real purpose.
+I've decided to keep things simple. Using a plain Material design provided by vanilla Android (which I find nice BTW). I don't use custom views nor Fragments for this task as they would rather add complexity than serve a real purpose.
 
 ## Frameworks
 I didn't abuse the project with unnecessary dependencies , I've only used what I though is needed.
